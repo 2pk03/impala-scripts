@@ -1,6 +1,7 @@
 #!/bin/bash
 HIVE_TABLE=ZIPCODE_HBASE
 HBASE_TABLE=zipcode_hive
+IMPALA_HOST=localhost:21000
 
 unzip -u median_income_by_zipcode_census_2000.zip
 # Remove Header
@@ -26,7 +27,7 @@ hbase shell hb1
 
 echo 
 echo ------------------------------------------------------
-echo  Create the Hive table using by HBaseStorageHandler
+echo  Create the Hive table using HBaseStorageHandler
 echo ------------------------------------------------------
 echo 
 
@@ -73,7 +74,7 @@ echo ------------------------------------------------------
 echo 
 read
 
-impala-shell -q "refresh"
+impala-shell -i $IMPALA_HOST -q "refresh"
 
 echo 
 echo ------------------------------------------------------
@@ -91,5 +92,7 @@ echo
 echo "=> select count(*) from $HIVE_TABLE where income>'0' and income<'7000' (press Enter)"
 echo 
 read
-impala-shell -q "select count(*) from $HIVE_TABLE where income>'0' and income<'7000';"
+impala-shell -i $IMPALA_HOST -q "select count(*) from $HIVE_TABLE where income>'0' and income<'7000';"
 
+# delete temp data
+rm -f DEC_00* aff*.txt

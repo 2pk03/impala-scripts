@@ -94,5 +94,12 @@ echo
 read
 impala-shell -i $IMPALA_HOST -q "select count(*) from $HIVE_TABLE where income>'0' and income<'7000';"
 
+echo
+echo " => select * from ZIPCODE_HBASE where income between '1000' and '5000' order by income DESC limit 20; (press Enter)"
+echo
+read
+impala-shell -i $IMPALA_HOST -q "select * from ZIPCODE_HBASE where income between '1000' and '5000' order by income DESC limit 20;"
+echo
+
 # delete temp data
 rm -f DEC_00* aff*.txt

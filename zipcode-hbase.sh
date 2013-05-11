@@ -1,7 +1,8 @@
 #!/bin/bash
 HIVE_TABLE=ZIPCODE_HBASE
 HBASE_TABLE=zipcode_hive
-IMPALA_HOST=localhost:21000
+IMPALA_HOST=`hostname`:21000
+IMPALA_OPTS=-k
 
 unzip -u median_income_by_zipcode_census_2000.zip
 # Remove Header
@@ -74,7 +75,7 @@ echo ------------------------------------------------------
 echo 
 read
 
-impala-shell -i $IMPALA_HOST -q "refresh"
+impala-shell -i $IMPALA_HOST $IMPALA_OPTS -q "refresh"
 
 echo 
 echo ------------------------------------------------------
@@ -85,20 +86,20 @@ echo
 echo "=> select * from $HIVE_TABLE limit 4 (press Enter)"
 echo
 read
-impala-shell -q "select * from $HIVE_TABLE limit 4"
+impala-shell -i $IMPALA_HOST $IMPALA_OPTS -q "select * from $HIVE_TABLE limit 4"
 echo
 
 echo
 echo "=> select count(*) from $HIVE_TABLE where income>'0' and income<'7000' (press Enter)"
 echo 
 read
-impala-shell -i $IMPALA_HOST -q "select count(*) from $HIVE_TABLE where income>'0' and income<'7000';"
+impala-shell -i $IMPALA_HOST $IMPALA_OPTS -q "select count(*) from $HIVE_TABLE where income>'0' and income<'7000';"
 
 echo
 echo " => select * from ZIPCODE_HBASE where income between '1000' and '5000' order by income DESC limit 20; (press Enter)"
 echo
 read
-impala-shell -i $IMPALA_HOST -q "select * from ZIPCODE_HBASE where income between '1000' and '5000' order by income DESC limit 20;"
+impala-shell -i $IMPALA_HOST $IMPALA_OPTS -q "select * from ZIPCODE_HBASE where income between '1000' and '5000' order by income DESC limit 20;"
 echo
 
 # delete temp data

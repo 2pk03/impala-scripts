@@ -39,7 +39,7 @@ cat DEC_00_SF3_P077_with_ann_noheader.csv | head -5
 
 echo 
 echo ------------------------------------------------------
-echo  "Create the Hive table using HBaseStorageHandler"
+echo  "Create the HBase table"
 echo ------------------------------------------------------
 echo 
 echo "create '$HBASE_TABLE', 'id', 'zip', 'desc', 'income'"
@@ -52,7 +52,7 @@ rm -rf hb1
 
 echo 
 echo ------------------------------------------------------
-echo "Create Hive's external table"
+echo "Create Hive's external table using HBaseStorageHandler"
 echo ------------------------------------------------------
 echo 
 echo "CREATE EXTERNAL TABLE $HIVE_TABLE (key STRING,zip STRING,desc1 STRING,desc2 STRING,income STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler' WITH SERDEPROPERTIES (\"hbase.columns.mapping\" = \":key,zip:zip,desc:desc1,desc:desc2,income:income\") TBLPROPERTIES(\"hbase.table.name\" = \"$HBASE_TABLE\");"
@@ -78,8 +78,22 @@ echo ------------------------------------------------------
 echo
 
 echo "scan '$HBASE_TABLE', LIMIT => 2"
+echo "(press Enter)"
+read
 echo
 echo "scan '$HBASE_TABLE', LIMIT => 2" > hb2
+echo "exit" >> hb2
+hbase shell hb2
+
+echo 
+echo ------------------------------------------------------
+echo "Get a HBase row"
+echo ------------------------------------------------------
+echo
+echo "get 'zipcode_hive', '8600000US00601' , 'zip' , 'income'"
+echo "(press Enter)"
+read
+echo "get 'zipcode_hive', '8600000US00601' , 'zip' , 'income'" > hb2
 echo "exit" >> hb2
 hbase shell hb2 && rm -rf hb2
 

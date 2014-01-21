@@ -99,15 +99,6 @@ hbase shell hb2 && rm -rf hb2
 
 echo 
 echo ------------------------------------------------------
-echo "Refresh Impala's catalog (press Enter)"
-echo ------------------------------------------------------
-echo 
-read
-
-impala-shell -i $IMPALA_HOST $IMPALA_OPTS -q "refresh"
-
-echo 
-echo ------------------------------------------------------
 echo "Run sample queries "
 echo ------------------------------------------------------
 echo 
